@@ -1,0 +1,60 @@
+drop database if exists posto_de_gasolina;
+create database posto_de_gasolina;
+use posto_de_gasolina;
+
+create table combustiveis (
+id_combustivel int auto_increment primary key,
+tipo varchar(50) not null,
+preco_por_litro decimal(5, 2)
+);
+
+create table bombas (
+id_bomba int auto_increment primary key,
+descricao varchar(100) not null
+);
+
+create table funcionarios (
+id_funcionario int auto_increment primary key,
+nome varchar(100) not null,
+cargo varchar(50) not null,
+turno enum ("M", "V", "N")
+);
+
+create table clientes (
+id_cliente int auto_increment primary key,
+nome varchar(100) not null,
+telefone varchar(15) not null,
+email varchar(100)
+);
+
+create table abastecimentos (
+id_abastecimento int auto_increment primary key,
+volume decimal (6,2),
+valor_total decimal(8,2),
+data_abastecimento datetime,
+id_combustivel int,
+id_bomba int,
+id_funcionario int,
+id_cliente int,
+foreign key (id_combustivel) references combustiveis(id_combustivel),
+foreign key (id_bomba) references bombas(id_bomba),
+foreign key (id_funcionario) references funcionarios(id_funcionario),
+foreign key (id_cliente) references clientes(id_cliente)
+);
+
+create table servicos (
+id_servico int auto_increment primary key,
+descricao varchar (255),
+preco decimal (8,2)
+);
+
+create table transacoes (
+id_transacao int auto_increment primary key,
+total_pago decimal(10,2),
+data_transacao datetime,
+forma_pagamento ENUM ("M", "V", "N"),
+id_abastecimento int, 
+id_servico int, 
+foreign key (id_abastecimento) references abastecimentos(id_abastecimento),
+foreign key (id_servico) references servicos(id_servico)
+);
